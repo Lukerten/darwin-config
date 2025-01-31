@@ -106,7 +106,7 @@
       setw -g window-status-current-format '#[reverse]#[noreverse]#I #W #F#[reverse]#[noreverse]'
 
       setw -g window-status-style 'fg=red bg=black'
-      setw -g window-status-separator '|'
+      setw -g window-status-separator ' '
       setw -g window-status-format ' #I #[fg=white]#W #[fg=yellow]#F '
 
       setw -g window-status-bell-style 'fg=yellow bg=red bold'
