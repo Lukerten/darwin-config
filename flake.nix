@@ -56,6 +56,7 @@
       };
       nixpkgs = {
         hostPlatform = "aarch64-darwin";
+        config.allowUnfree = true;
       };
 
       users.users.lucasbrendgen.home = "/Users/lucasbrendgen";

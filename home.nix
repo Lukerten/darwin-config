@@ -6,7 +6,7 @@
   ...
 }: {
   imports = [
-    ./features/default.nix
+    ./features
   ];
 
   home.username = "lucasbrendgen";
@@ -18,9 +18,9 @@
   ];
 
   home.file = {
-    ".config/sketchybar".source = ./dots/sketchybar;
-    ".config/nix".source = ./dots/nix;
-    ".config/nvim".source = ./dots/nvim;
+    # ".config/alacritty".source = ./static/alacritty/theme;
+    ".config/nix".source = ./static/nix;
+    ".config/nvim".source = ./static/nvim;
   };
 
   home.sessionVariables = {
