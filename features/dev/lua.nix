@@ -1,11 +1,11 @@
 {pkgs, ...}: {
   home = {
     shellAliases = {
-      "pnpm-ci" = "pnpm install --frozen-lockfile";
     };
     packages = with pkgs; [
-      nodejs-slim
-      pnpm
+      luajit
+      luajitPackages.dkjson
+      luajitPackages.luasocket
     ];
   };
 }

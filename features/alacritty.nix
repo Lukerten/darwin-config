@@ -15,6 +15,15 @@
           "~/.config/alacritty/theme/catppuccin-mocha.toml"
         ];
       };
+      keyboard = {
+        bindings = [
+          {
+            key = "N";
+            mods = "Control";
+            action = "CreateNewWindow";
+          }
+        ];
+      };
       window = {
         padding = {
           x = 20;

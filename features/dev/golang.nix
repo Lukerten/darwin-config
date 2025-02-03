@@ -6,6 +6,11 @@
       go
       golangci-lint
       sqlc
+      go-task
+      golines
+      go-mockery
+      oapi-codegen
+      enumer
     ];
   };
 }

@@ -18,7 +18,7 @@
 
         # if /go/bin exists. add it to the PATH
         if [ ~/go/bin ]; then
-          PATH=~/go/bin:$PATH
+          PATH=$PATH:~/go/bin
         fi
       '';
   };
