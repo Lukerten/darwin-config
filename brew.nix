@@ -16,6 +16,9 @@
     "spotify"
     "zoom"
     "slack"
+    "cheatsheet"
+    "webex"
+    "webex-meetings"
   ];
   homebrew.brews = [];
 }

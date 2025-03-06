@@ -30,7 +30,6 @@
         ./brew.nix
       ];
 
-      services.nix-daemon.enable = true;
       nix.settings = {
         experimental-features = [
           "nix-command"

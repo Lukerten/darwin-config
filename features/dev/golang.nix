@@ -3,14 +3,14 @@
     shellAliases = {
     };
     packages = with pkgs; [
-      go
+      go_1_24
       golangci-lint
       sqlc
       go-task
       golines
-      go-mockery
       oapi-codegen
       enumer
+      gotools
     ];
   };
 }

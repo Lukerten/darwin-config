@@ -26,8 +26,8 @@
       };
       window = {
         padding = {
-          x = 20;
-          y = 20;
+          x = 5;
+          y = 5;
         };
         dynamic_padding = false;
         dynamic_title = true;

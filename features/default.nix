@@ -1,7 +1,9 @@
 {
   imports = [
     ./dev
+    ./helix
     ./nushell
+    ./nvim
     ./alacritty.nix
     ./direnv.nix
     ./git.nix

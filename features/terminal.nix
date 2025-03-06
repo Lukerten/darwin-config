@@ -76,9 +76,10 @@ in {
     diffsitter # Better diff
     timer # Timer
     alejandra # default nix formatter
-    neovim # Better vim
     nix-diff # differ
     nix-health # health checker
     nh # home-manager & nixos wrapper
+
+    spicetify-cli
   ];
 }

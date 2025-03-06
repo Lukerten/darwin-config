@@ -14,13 +14,11 @@
   home.stateVersion = "23.05";
 
   home.packages = with pkgs; [
-    sketchybar
   ];
 
   home.file = {
     # ".config/alacritty".source = ./static/alacritty/theme;
     ".config/nix".source = ./static/nix;
-    ".config/nvim".source = ./static/nvim;
   };
 
   home.sessionVariables = {
