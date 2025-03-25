@@ -2,19 +2,33 @@
   lsp = [
     {
       package = pkgs.marksman;
-      config = ''
-        -- Markdown Language Server
-        lspconfig.marksman.setup{
-          capabilities = capabilities;
-          on_attach = attach_keymaps,
-          cmd = {'${pkgs.marksman}/bin/marksman', 'server'},
-          filetypes = { 'markdown' },
-          root_dir = util.root_pattern('.git', 'markdown.config.json'),
-        }
-      '';
+      config =
+        # lua
+        ''
+          -- Markdown Language Server
+          lspconfig.marksman.setup{
+            capabilities = capabilities;
+            on_attach = attach_keymaps,
+            cmd = {'${pkgs.marksman}/bin/marksman', 'server'},
+            filetypes = { 'markdown' },
+            root_dir = util.root_pattern('.git', 'markdown.config.json'),
+          }
+        '';
     }
   ];
-  formatter = null;
+  format = [
+    {
+      package = pkgs.mdformat;
+      config =
+        # lua
+        ''
+          -- Markdown formatting: mdformat
+          table.insert(ls_sources, none_ls.builtins.formatting.mdformat.with({
+            command = {"${pkgs.mdformat}/bin/mdformat", "--wrap", "80"},
+          }))
+        '';
+    }
+  ];
   extraPackages = [];
   extraPlugins = [];
 }

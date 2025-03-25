@@ -5,6 +5,7 @@
       config =
         # lua
         ''
+          local buildFlags = {"-tags=unittest wireinject integrationtest systemtest ruleguard"}
           lspconfig.gopls.setup{
             capabilities = capabilities;
             on_attach = attach_keymaps,
@@ -16,20 +17,39 @@
                 },
                 staticcheck = true,
                 gofumpt = true,
+                buildFlags = buildFlags,
               },
             },
           }
-
-          require("go").setup()
         '';
     }
   ];
-  formatter = null;
+
+  format = [];
+
   extraPackages = with pkgs; [
     go
     golangci-lint
+    gotools
   ];
-  extraPlugins = with pkgs.vimPlugins; [
-    go-nvim
+
+  extraPlugins = [
+    {
+      plugin = pkgs.vimPlugins.go-nvim;
+      type = "lua";
+      config =
+        #lua
+        ''
+          require("go").setup()
+          local format_sync_grp = vim.api.nvim_create_augroup("goimports", {})
+          vim.api.nvim_create_autocmd("BufWritePre", {
+            pattern = "*.go",
+            callback = function()
+             require('go.format').goimports()
+            end,
+            group = format_sync_grp,
+          })
+        '';
+    }
   ];
 }
