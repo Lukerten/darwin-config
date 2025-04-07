@@ -15,19 +15,10 @@
           "~/.config/alacritty/theme/catppuccin-mocha.toml"
         ];
       };
-      keyboard = {
-        bindings = [
-          {
-            key = "N";
-            mods = "Control";
-            action = "CreateNewWindow";
-          }
-        ];
-      };
       window = {
         padding = {
-          x = 5;
-          y = 5;
+          x = 20;
+          y = 20;
         };
         dynamic_padding = false;
         dynamic_title = true;
@@ -57,17 +48,30 @@
         size = 12;
         builtin_box_drawing = false;
       };
+
       bell = {
         animation = "Linear";
-        duration = 500;
+        duration = 0;
       };
+
       selection = {
         semantic_escape_chars = ",│`|:\"' ()[]{}<>\t";
         save_to_clipboard = true;
       };
+
+      keyboard = {
+        bindings = [
+          {
+            key = "N";
+            mods = "Control";
+            action = "CreateNewWindow";
+          }
+        ];
+      };
     };
   };
 
+  # add xterm wrapper
   home = {
     packages = [
       (

@@ -7,10 +7,6 @@
       golangci-lint
       sqlc
       go-task
-      golines
-      oapi-codegen
-      enumer
-      gotools
     ];
   };
 }
