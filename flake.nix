@@ -2,80 +2,77 @@
   description = "lucasbrendgens nix-darwin System Flake";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
-    nix-darwin = {
-      url = "github:LnL7/nix-darwin";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    home-manager = {
-      url = "github:nix-community/home-manager";
+    nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
+
+    # Environment/system management
+    darwin.url = "github:lnl7/nix-darwin/master";
+    darwin.inputs.nixpkgs.follows = "nixpkgs";
+    home-manager.url = "github:nix-community/home-manager";
+    home-manager.inputs.nixpkgs.follows = "nixpkgs";
+    nixvim = {
+      url = "github:nix-community/nixvim";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 
-  outputs = inputs @ {
+  outputs = {
     self,
-    nix-darwin,
+    darwin,
     nixpkgs,
+    nixvim,
     home-manager,
     ...
-  }: let
-    configuration = {pkgs, ...}: {
-      environment.systemPackages = [
-        pkgs.alejandra
-        pkgs.direnv
-      ];
+  } @ inputs: let
+    inherit (darwin.lib) darwinSystem;
+    inherit (inputs.nixpkgs.lib) attrValues makeOverridable optionalAttrs singleton;
 
-      imports = [
-        ./brew.nix
-      ];
-
-      nix.settings = {
-        experimental-features = [
-          "nix-command"
-          "flakes"
-        ];
-        warn-dirty = false;
-        flake-registry = "";
-      };
-      programs.zsh.enable = true;
-
-      system = {
-        defaults = {
-          dock.autohide = true;
-          dock.mru-spaces = false;
-          finder.AppleShowAllExtensions = true;
-          finder.FXPreferredViewStyle = "clmv";
-          loginwindow.LoginwindowText = "devops-toolbox";
-          screencapture.location = "~/Pictures/screenshots";
-          screensaver.askForPasswordDelay = 10;
-        };
-        configurationRevision = self.rev or self.dirtyRev or null;
-        stateVersion = 5;
-      };
-      nixpkgs = {
-        hostPlatform = "aarch64-darwin";
-        config.allowUnfree = true;
-      };
-
-      users.users.lucasbrendgen.home = "/Users/lucasbrendgen";
-      home-manager.backupFileExtension = "backup";
+    # Configuration for `nixpkgs`
+    nixpkgsConfig = {
+      config = {allowUnfree = true;};
+      overlays =
+        attrValues self.overlays
+        ++ singleton (
+          # Sub in x86 version of packages that don't build on Apple Silicon yet
+          final: prev: (optionalAttrs (prev.stdenv.system == "aarch64-darwin") {
+            inherit
+              (final.pkgs-x86)
+              idris2
+              niv
+              purescript
+              ;
+          })
+        );
     };
   in {
-    darwinConfigurations = {
-      "GF4QLV9T7Y" = nix-darwin.lib.darwinSystem {
+    # My `nix-darwin` configs
+    darwinConfigurations = rec {
+      GF4QLV9T7Y = darwinSystem {
         system = "aarch64-darwin";
-        modules = [
-          configuration
-          home-manager.darwinModules.home-manager
-          {
-            home-manager.useGlobalPkgs = true;
-            home-manager.useUserPackages = true;
-            home-manager.users.lucasbrendgen = import ./home.nix;
-          }
-        ];
+        modules =
+          attrValues self.darwinModules
+          ++ [
+            ./system
+            home-manager.darwinModules.home-manager
+            nixvim.nixDarwinModules.nixvim
+            {
+              nixpkgs = nixpkgsConfig;
+              home-manager.useGlobalPkgs = true;
+              home-manager.useUserPackages = true;
+              home-manager.users.lucasbrendgen = import ./home;
+            }
+          ];
       };
     };
-    darwinPackages = self.darwinConfigurations."GF4QLV9T7Y".pkgs;
+    overlays = {
+      apple-silicon = final: prev:
+        optionalAttrs (prev.stdenv.system == "aarch64-darwin") {
+          # Add access to x86 packages system is running Apple Silicon
+          pkgs-x86 = import inputs.nixpkgs-unstable {
+            system = "x86_64-darwin";
+            inherit (nixpkgsConfig) config;
+          };
+        };
+    };
+    darwinModules = {};
   };
 }
