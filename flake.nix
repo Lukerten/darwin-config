@@ -45,7 +45,7 @@
     };
   in {
     # My `nix-darwin` configs
-    darwinConfigurations = rec {
+    darwinConfigurations = {
       GF4QLV9T7Y = darwinSystem {
         system = "aarch64-darwin";
         modules =
@@ -56,15 +56,17 @@
             nixvim.nixDarwinModules.nixvim
             {
               nixpkgs = nixpkgsConfig;
-              home-manager.useGlobalPkgs = true;
-              home-manager.useUserPackages = true;
-              home-manager.users.lucasbrendgen = import ./home;
+              home-manager = {
+                useGlobalPkgs = true;
+                useUserPackages = true;
+                users.lucasbrendgen = import ./home;
+              };
             }
           ];
       };
     };
     overlays = {
-      apple-silicon = final: prev:
+      apple-silicon = _: prev:
         optionalAttrs (prev.stdenv.system == "aarch64-darwin") {
           # Add access to x86 packages system is running Apple Silicon
           pkgs-x86 = import inputs.nixpkgs-unstable {
