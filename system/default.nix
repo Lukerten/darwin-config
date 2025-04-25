@@ -6,7 +6,6 @@
 
   imports = [
     ./brew.nix
-    ./nvim
   ];
 
   nix.settings = {

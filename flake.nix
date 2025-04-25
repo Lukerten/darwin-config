@@ -10,7 +10,7 @@
     home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     nixvim = {
-      url = "github:nix-community/nixvim";
+      url = "github:Lukerten/nixvim";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
@@ -18,17 +18,18 @@
   outputs = {
     self,
     darwin,
-    nixpkgs,
     nixvim,
     home-manager,
     ...
   } @ inputs: let
     inherit (darwin.lib) darwinSystem;
-    inherit (inputs.nixpkgs.lib) attrValues makeOverridable optionalAttrs singleton;
-
+    inherit (inputs.nixpkgs.lib) attrValues optionalAttrs singleton;
     # Configuration for `nixpkgs`
     nixpkgsConfig = {
-      config = {allowUnfree = true;};
+      config = {
+        allowUnfree = true;
+        allowBroken = true;
+      };
       overlays =
         attrValues self.overlays
         ++ singleton (
@@ -53,7 +54,6 @@
           ++ [
             ./system
             home-manager.darwinModules.home-manager
-            nixvim.nixDarwinModules.nixvim
             {
               nixpkgs = nixpkgsConfig;
               home-manager = {
@@ -65,16 +65,7 @@
           ];
       };
     };
-    overlays = {
-      apple-silicon = _: prev:
-        optionalAttrs (prev.stdenv.system == "aarch64-darwin") {
-          # Add access to x86 packages system is running Apple Silicon
-          pkgs-x86 = import inputs.nixpkgs-unstable {
-            system = "x86_64-darwin";
-            inherit (nixpkgsConfig) config;
-          };
-        };
-    };
+    overlays = import ./overlays.nix {inherit inputs;};
     darwinModules = {};
   };
 }

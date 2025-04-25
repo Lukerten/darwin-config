@@ -1,22 +1,17 @@
-# home.nix
-# home-manager switch
 {
-  config,
-  pkgs,
-  ...
-}: {
   imports = [
     ./features
   ];
 
-  home.username = "lucasbrendgen";
-  home.homeDirectory = "/Users/lucasbrendgen";
-  home.stateVersion = "23.05";
-
-  home.sessionPath = [
-    "/run/current-system/sw/bin"
-    "$HOME/.nix-profile/bin"
-  ];
+  home = {
+    username = "lucasbrendgen";
+    homeDirectory = "/Users/lucasbrendgen";
+    stateVersion = "23.05";
+    sessionPath = [
+      "/run/current-system/sw/bin"
+      "$HOME/.nix-profile/bin"
+    ];
+  };
   programs.home-manager.enable = true;
   programs.zsh = {
     enable = true;

@@ -79,7 +79,7 @@ in {
     nix-diff # differ
     nix-health # health checker
     nh # home-manager & nixos wrapper
-
+    neovim
     spicetify-cli
   ];
 }
