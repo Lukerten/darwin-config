@@ -4,7 +4,7 @@
       "pnpm-ci" = "pnpm install --frozen-lockfile";
     };
     packages = with pkgs; [
-      nodejs-slim
+      nodejs
       pnpm
     ];
   };
